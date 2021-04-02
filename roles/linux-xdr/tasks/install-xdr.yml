@@ -1,0 +1,29 @@
+---
+- name: Is XDR Already Installed? 
+  become: yes
+  become_method: sudo
+  stat:
+    path: "{{xdr.dir}}/cytool"
+  register: cytool
+
+- name: Copy a Linux Install file to host
+  become: yes
+  become_method: sudo
+  ansible.builtin.copy:
+    src: "{{install.file}}"
+    dest: "{{install.dir}}/{{install.file}}"
+    owner: root
+    group: root
+    mode: 0755
+  when: cytool.stat.exists == False
+
+- name: Is the Install File in the correct place? 
+  stat:
+    path: "{{install.dir}}/{{install.file}}"
+  register: install_file 
+
+- name: Install XDR
+  become: yes
+  become_method: sudo
+  command: '"{{install.dir}}/{{install.file}}"'
+  when: install_file.stat.exists 

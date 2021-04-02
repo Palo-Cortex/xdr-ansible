@@ -1,0 +1,31 @@
+---
+- name: Is XDR Installed? 
+  become: yes
+  become_method: sudo
+  stat:
+    path: "{{xdr.dir}}/cytool" 
+  register: cytool
+
+- name: Is XDR Working? 
+  become: yes
+  become_method: sudo
+  command: /opt/traps/bin/cytool last_checkin 
+  register: traps_output
+  when: cytool.stat.exists
+
+- debug:
+    var: traps_output.stdout_lines
+  when: cytool.stat.exists
+
+- name: Do I need to remove the install file? 
+  stat:
+    path: "{{install.dir}}/{{install.file}}"
+  register: install_file
+
+- name: Remove XDR Install file 
+  become: yes
+  become_method: sudo
+  ansible.builtin.file:
+    path: "{{install.dir}}/{{install.file}}"
+    state: absent
+  when: install_file.stat.exists 

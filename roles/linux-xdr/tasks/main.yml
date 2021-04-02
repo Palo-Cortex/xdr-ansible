@@ -1,0 +1,6 @@
+---
+- name: Install XDR 
+  include_tasks: install-xdr.yml 
+
+- name: Test XDR 
+  include_tasks: test-xdr.yml 

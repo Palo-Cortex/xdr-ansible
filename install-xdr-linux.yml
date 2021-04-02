@@ -1,0 +1,8 @@
+---
+# file: dist-certs.yml
+# Distributes Let's Encrypt SSL certs to systems that use the certificate
+- hosts: linux_servers
+  gather_facts: False
+  roles:
+    - role: linux-xdr 
+

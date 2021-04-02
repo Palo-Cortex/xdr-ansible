@@ -1,0 +1,6 @@
+# file: group_vars/Ubuntu
+install:
+  file: linux-7-3-1.sh
+  dir: /tmp
+xdr:
+  dir: /opt/traps/bin
